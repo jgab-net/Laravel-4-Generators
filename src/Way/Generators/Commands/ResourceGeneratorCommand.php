@@ -78,7 +78,11 @@ class ResourceGeneratorCommand extends Command {
 
         $this->generateModel();
         $this->generateController();
-        $this->generateViews();
+
+        if(get_called_class() !== 'Way\\Generators\\Commands\\RestGeneratorCommand'){
+            $this->generateViews();
+        }
+
         $this->generateMigration();
         $this->generateSeed();
 

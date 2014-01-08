@@ -1,7 +1,7 @@
 <?php
 
-class {{className}} extends Eloquent {
+class {{className}} extends Model {
 	protected $guarded = array();
 
-	public static $rules = array({{rules}});
+	protected static $rules = array({{rules}});
 }

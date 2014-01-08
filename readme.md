@@ -1,3 +1,7 @@
+This fork adds support to rest on the generate command: scaffold, for use only consult with Content-Type = application / json
+
+added bootstrap3
+
 This Laravel 4 package provides a variety of generators to speed up your development process. These generators include:
 
 - `generate:model`

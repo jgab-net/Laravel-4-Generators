@@ -115,29 +115,29 @@ EOT;
             switch($type)
             {
                 case 'integer':
-                   $element = "{{ Form::input('number', '$name') }}";
+                   $element = "{{ Form::input('number', '$name',null,array('class'=>'form-control')) }}";
                     break;
 
                 case 'text':
-                    $element = "{{ Form::textarea('$name') }}";
+                    $element = "{{ Form::textarea('$name',null,array('class'=>'form-control')) }}";
                     break;
 
                 case 'boolean':
-                    $element = "{{ Form::checkbox('$name') }}";
+                    $element = "{{ Form::checkbox('$name',null,array('class'=>'form-control')) }}";
                     break;
 
                 default:
-                    $element = "{{ Form::text('$name') }}";
+                    $element = "{{ Form::text('$name',null,array('class'=>'form-control')) }}";
                     break;
             }
 
             // Now that we have the correct $element,
             // We can build up the HTML fragment
             $frag = <<<EOT
-        <li>
+        <div class="form-group">
             {{ Form::label('$name', '$formalName:') }}
             $element
-        </li>
+        </div>
 
 EOT;
 

@@ -5,12 +5,10 @@
 <h1>Create {{Model}}</h1>
 
 {{ Form::open(array('route' => '{{models}}.store')) }}
-	<ul>
-{{formElements}}
-		<li>
-			{{ Form::submit('Submit', array('class' => 'btn btn-info')) }}
-		</li>
-	</ul>
+
+	{{formElements}}
+	{{ Form::submit('Submit', array('class' => 'btn btn-info')) }}
+
 {{ Form::close() }}
 
 @if ($errors->any())

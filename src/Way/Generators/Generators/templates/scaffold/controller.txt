@@ -23,6 +23,10 @@ class {{className}} extends BaseController {
 	{
 		${{models}} = $this->{{model}}->all();
 
+        if(Request::header('Content-Type')=='application/json'){
+            return Response::json(${{models}});
+        }
+
 		return View::make('{{models}}.index', compact('{{models}}'));
 	}
 
@@ -43,19 +47,25 @@ class {{className}} extends BaseController {
 	 */
 	public function store()
 	{
-		$input = Input::all();
-		$validation = Validator::make($input, {{Model}}::$rules);
+		$this->{{model}} = new {{Model}}(
+		    Request::header('Content-Type')=='application/json'?Input::json()->all():Input::all()
+		);
 
-		if ($validation->passes())
-		{
-			$this->{{model}}->create($input);
+        if ($this->{{model}}->save())
+        {
+            if(Request::header('Content-Type')=='application/json'){
+                return Response::json($this->{{model}});
+            }
+            return Redirect::route('{{models}}.index');
+        }
 
-			return Redirect::route('{{models}}.index');
-		}
+        if(Request::header('Content-Type')=='application/json'){
+            return Response::json($this->{{model}}->getErrors()->all(),400);
+        }
 
 		return Redirect::route('{{models}}.create')
 			->withInput()
-			->withErrors($validation)
+			->withErrors($this->{{model}}->getErrors())
 			->with('message', 'There were validation errors.');
 	}
 
@@ -67,7 +77,14 @@ class {{className}} extends BaseController {
 	 */
 	public function show($id)
 	{
-		${{model}} = $this->{{model}}->findOrFail($id);
+		${{model}} = $this->{{model}}->find($id);
+
+        if(Request::header('Content-Type')=='application/json'){
+            if(is_null(${{model}})){
+                return Response::json(array('not found'),400);
+            }
+            return Response::json(${{model}});
+        }
 
 		return View::make('{{models}}.show', compact('{{model}}'));
 	}
@@ -98,20 +115,30 @@ class {{className}} extends BaseController {
 	 */
 	public function update($id)
 	{
-		$input = array_except(Input::all(), '_method');
-		$validation = Validator::make($input, {{Model}}::$rules);
+	    ${{model}} = $this->{{model}}->find($id);
 
-		if ($validation->passes())
-		{
-			${{model}} = $this->{{model}}->find($id);
-			${{model}}->update($input);
+        if(is_null(${{model}})){
+            return Response::json(array('There were validation errors.'),400);
+        }
 
-			return Redirect::route('{{models}}.show', $id);
-		}
+	    ${{model}}->fill(
+	        Request::header('Content-Type')=='application/json'?Input::json()->all():Input::all(), '_method'
+	    );
+
+        if(${{model}}->update()){
+            if(Request::header('Content-Type')=='application/json'){
+                return Response::json(${{model}});
+            }
+            return Redirect::route('{{models}}.show', $id);
+        }
+
+        if(Request::header('Content-Type')=='application/json'){
+            return Response::json($this->test->getErrors()->all(),400);
+        }
 
 		return Redirect::route('{{models}}.edit', $id)
 			->withInput()
-			->withErrors($validation)
+			->withErrors(${{model}}->getErrors())
 			->with('message', 'There were validation errors.');
 	}
 
@@ -123,7 +150,17 @@ class {{className}} extends BaseController {
 	 */
 	public function destroy($id)
 	{
-		$this->{{model}}->find($id)->delete();
+		${{model}}=$this->{{model}}->find($id);
+
+		if(is_null(${{model}})){
+		    return Response::json(array('There were validation errors.'),400);
+		}
+
+		${{model}}->delete();
+
+		if(Request::header('Content-Type')=='application/json'){
+		    return Response::json($this->test->all());
+		}
 
 		return Redirect::route('{{models}}.index');
 	}

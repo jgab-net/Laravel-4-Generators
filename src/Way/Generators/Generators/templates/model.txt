@@ -1,7 +1,8 @@
 <?php
+Route::resource('tests', 'TestsController');
 
-class {{className}} extends Eloquent {
+class {{className}} extends Model {
 	protected $guarded = array();
 
-	public static $rules = array();
+	protected static $rules = array();
 }

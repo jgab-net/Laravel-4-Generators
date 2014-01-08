@@ -26,7 +26,7 @@ class GeneratorsServiceProvider extends ServiceProvider {
 		$this->registerTestGenerator();
 		$this->registerResourceGenerator();
 		$this->registerScaffoldGenerator();
-		$this->registerViewGenerator();
+        $this->registerViewGenerator();
 		$this->registerMigrationGenerator();
 		$this->registerPivotGenerator();
 		$this->registerSeedGenerator();
@@ -37,7 +37,7 @@ class GeneratorsServiceProvider extends ServiceProvider {
 			'generate.controller',
 			'generate.test',
 			'generate.scaffold',
-			'generate.resource',
+            'generate.resource',
 			'generate.view',
 			'generate.migration',
 			'generate.seed',
